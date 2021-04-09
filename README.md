@@ -4,14 +4,16 @@ A simple profile-based logcat filterer/highlighter.
 
 ## Usage
 
-Configuration profiles can be saved to the file: `~/.nyandroidlogcat.json`
-Run with your selected profile: `./nyandroidlogcat profileName`
+Build: `go build`
+Run: `./nyandroidlogcat`
+Configuration profiles can be saved to the file: `~/.nyandroidlogcat.json` \
+Run with a non-default profile: `./nyandroidlogcat profileName`
 
 ### Profile Format
 
 ```js
 {
-  "default": { // The profile name (default is used if one is not specified)
+  "default": { // The profile name ("default" is used if one is not specified)
     "time-format": "15:04:05", // Go time layout (Jan 2 15:04:05 2006 MST)
     "tag": { // Options for the logcat tag
       "show": true, // Show tags in the output
