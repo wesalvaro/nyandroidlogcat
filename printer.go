@@ -81,7 +81,6 @@ func (h *Highlighter) UnmarshalText(text []byte) error {
 		return fmt.Errorf("unknown color: %s", text)
 	}
 	h.Color = c.Add(color.FgBlack)
-	fmt.Println("Hightlighter ", h, h.Color)
 	return nil
 }
 
@@ -122,7 +121,6 @@ func newPrinter(config *PrinterConfig) *Printer {
 	if config.Msg.HighlightColor != nil {
 		highlighter = config.Msg.HighlightColor.Color
 	}
-	fmt.Printf("%q %q %q %q\n", tagFilter, tagIgnore, msgFilter, msgHighlight)
 	return &Printer{
 		TimeFormat:        config.TimeFormat,
 		ShowTag:           config.Tag.Show,
@@ -200,10 +198,18 @@ func (c *Printer) printLevel(e *Entry) {
 			fmt.Printf(" %s  ", e.Level.Emoji())
 		}
 	} else {
-		if c.LevelLong {
-			e.Level.Color().Printf("%s ", e.Level.String())
+		if c.LevelColor {
+			if c.LevelLong {
+				e.Level.Color().Printf("%s ", e.Level.String())
+			} else {
+				e.Level.Color().Printf("%c ", e.Level.Rune())
+			}
 		} else {
-			e.Level.Color().Printf("%c ", e.Level.Rune())
+			if c.LevelLong {
+				fmt.Printf("%s ", e.Level.String())
+			} else {
+				fmt.Printf("%c ", e.Level.Rune())
+			}
 		}
 	}
 }
