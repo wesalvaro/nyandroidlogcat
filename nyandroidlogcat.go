@@ -7,6 +7,7 @@ import (
 	"os"
 	"os/exec"
 	"path"
+	"strings"
 )
 
 func createLogcatScanner() *bufio.Scanner {
@@ -18,17 +19,20 @@ func createLogcatScanner() *bufio.Scanner {
 
 func nyan(c *Printer, scanner *bufio.Scanner) {
 	e := (*Entry)(nil)
+	var mLines []string
 	for scanner.Scan() {
 		text := scanner.Text()
 		if len(text) == 0 {
 			if e != nil {
+			  e.Message = strings.Join(mLines, "\n")
 				c.Print(e)
+			  mLines = nil
 				e = nil
 			}
 			continue
 		}
 		if e != nil {
-			e.Message += text
+			mLines = append(mLines, text)
 		} else {
 			e = newEntry(text)
 		}
