@@ -17,7 +17,8 @@ func createLogcatScanner() *bufio.Scanner {
 	return bufio.NewScanner(readCloser)
 }
 
-func nyan(c *Printer, scanner *bufio.Scanner) {
+func nyan(scanner *bufio.Scanner, out chan *Entry) {
+	defer close(out)
 	e := (*Entry)(nil)
 	var mLines []string
 	for scanner.Scan() {
@@ -25,7 +26,7 @@ func nyan(c *Printer, scanner *bufio.Scanner) {
 		if len(text) == 0 {
 			if e != nil {
 			  e.Message = strings.Join(mLines, "\n")
-				c.Print(e)
+				out <- e
 			  mLines = nil
 				e = nil
 			}
@@ -39,6 +40,18 @@ func nyan(c *Printer, scanner *bufio.Scanner) {
 	}
 	if err := scanner.Err(); err != nil {
 		fmt.Fprintln(os.Stderr, "error reading log:", err)
+	}
+}
+
+func nyanForever(out chan *Entry) {
+	one := make(chan *Entry)
+	for {
+		fmt.Println("Waiting for device...")
+		go nyan(createLogcatScanner(), one)
+		for e := range one {
+			out <- e
+		}
+		one = make(chan *Entry)
 	}
 }
 
@@ -83,5 +96,10 @@ func main() {
 		configs, _ := NewPrinterConfigMap([]byte(sampleProfile))
 		profile = configs["default"]
 	}
-	nyan(newPrinter(profile), createLogcatScanner())
+	printer := newPrinter(profile)
+	entries := make(chan *Entry)
+	go nyanForever(entries)
+	for e := range entries {
+		printer.Print(e)
+	}
 }
