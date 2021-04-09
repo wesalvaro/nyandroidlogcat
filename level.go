@@ -48,9 +48,9 @@ func (v Level) Color() *color.Color {
 	case Info:
 		return color.New(color.FgWhite)
 	case Warning:
-		return color.New(color.FgHiYellow)
+		return color.New(color.BgYellow, color.FgBlack)
 	case Error:
-		return color.New(color.FgHiRed)
+		return color.New(color.BgRed, color.FgBlack)
 	case Fatal:
 		return color.New(color.BgHiWhite, color.FgBlack, color.Bold)
 	}
