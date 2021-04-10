@@ -26,7 +26,7 @@ func NewCursedNyandraid() *cursedNyandraid {
 	}
 	list := widgets.NewList()
 	list.Title = getTitleString(initialFilterLevel, "")
-	list.WrapText = false
+	list.WrapText = true
 	list.SelectedRowStyle = ui.NewStyle(ui.ColorWhite, ui.ColorBlue)
 
 	grid := ui.NewGrid()
