@@ -84,21 +84,23 @@ func (n *cursedNyandraid) start() {
 			filter = filter[:len(filter)-1]
 			n.list.Title = getTitleString(level, filter)
 		case "<C-k>":
-			n.followBottom = false
 			n.list.ScrollPageUp()
+			n.followBottom = false
 		case "<C-j>":
 			n.list.ScrollPageDown()
+			n.followBottom = n.isAtBottom()
 		case "<Home>":
-			n.followBottom = false
 			n.list.ScrollTop()
-		case "<End>":
-			n.followBottom = true
-			n.list.ScrollBottom()
-		case "<Up>", "<MouseWheelUp>":
 			n.followBottom = false
+		case "<End>":
+			n.list.ScrollBottom()
+			n.followBottom = true
+		case "<Up>", "<MouseWheelUp>":
 			n.list.ScrollUp()
+			n.followBottom = false
 		case "<Down>", "<MouseWheelDown>":
 			n.list.ScrollDown()
+			n.followBottom = n.isAtBottom()
 		case "<Escape>", "<C-c>":
 			return
 		case "<Right>":
@@ -117,6 +119,10 @@ func (n *cursedNyandraid) start() {
 		}
 		n.render()
 	}
+}
+
+func (n *cursedNyandraid) isAtBottom() bool {
+	return n.list.SelectedRow == (len(n.list.Rows) - 1)
 }
 
 func (n *cursedNyandraid) render() {
