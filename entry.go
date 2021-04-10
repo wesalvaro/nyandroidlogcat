@@ -1,4 +1,4 @@
-package main
+package nyandroidlogcat
 
 import (
 	"math"
@@ -20,7 +20,7 @@ type Entry struct {
 	Message string
 }
 
-func newEntry(text string) *Entry {
+func NewEntry(text string) *Entry {
 	vv := match(header, text)
 	if vv == nil {
 		return nil

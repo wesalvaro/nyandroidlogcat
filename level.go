@@ -1,4 +1,4 @@
-package main
+package nyandroidlogcat
 
 import (
 	"strings"

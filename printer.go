@@ -1,4 +1,4 @@
-package main
+package nyandroidlogcat
 
 import (
 	"encoding/json"
@@ -100,7 +100,7 @@ type Printer struct {
 	ShowTag           bool
 }
 
-func newPrinter(config *PrinterConfig) *Printer {
+func NewPrinter(config *PrinterConfig) *Printer {
 	tagFilter := make([]*regexp.Regexp, len(config.Tag.Filter))
 	for i, f := range config.Tag.Filter {
 		tagFilter[i] = regexp.MustCompile(f)

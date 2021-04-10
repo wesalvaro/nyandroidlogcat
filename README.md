@@ -4,8 +4,8 @@ A simple profile-based logcat filterer/highlighter.
 
 ## Usage
 
-Build: `go build`
-Run: `./nyandroidlogcat`
+Build: `cd streamcat && go build`
+Run: `./streamcat`
 Configuration profiles can be saved to the file: `~/.nyandroidlogcat.json` \
 Run with a non-default profile: `./nyandroidlogcat profileName`
 
