@@ -35,7 +35,7 @@ func Nyan(scanner *bufio.Scanner) <- chan *Entry {
 			if e != nil {
 				mLines = append(mLines, text)
 			} else {
-				e = NewEntry(text)
+				e = NewEntryFromHeader(text)
 			}
 		}
 		if err := scanner.Err(); err != nil {
@@ -50,7 +50,7 @@ func NyanForever() <- chan *Entry {
 	go func() {
 		for {
 			entries := Nyan(CreateLogcatScanner())
-			fmt.Println("Waiting for device...")
+			out <- NewEntryNow(Debug, "Control", "Waiting for device...")
 			for e := range entries {
 				out <- e
 			}

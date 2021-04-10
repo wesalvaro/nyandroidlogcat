@@ -20,7 +20,15 @@ type Entry struct {
 	Message string
 }
 
-func NewEntry(text string) *Entry {
+func NewEntry(when time.Time, level Level, tag string, message string) *Entry {
+	return &Entry{when, level, tag, message}
+}
+
+func NewEntryNow(level Level, tag string, message string) *Entry {
+	return NewEntry(time.Now(), level, tag, message)
+}
+
+func NewEntryFromHeader(text string) *Entry {
 	vv := match(header, text)
 	if vv == nil {
 		return nil
@@ -37,7 +45,7 @@ func NewEntry(text string) *Entry {
 		day,
 		hour, minute, second, nsec*int(math.Pow10(6)),
 		now.Location())
-	return &Entry{t, strToLevel([]rune(vv["lvl"])[0]), vv["tag"], ""}
+	return NewEntry(t, strToLevel([]rune(vv["lvl"])[0]), vv["tag"], "")
 }
 
 func match(pattern *regexp.Regexp, text string) map[string]string {
