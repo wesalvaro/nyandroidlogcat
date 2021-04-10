@@ -15,7 +15,7 @@ func CreateLogcatScanner() *bufio.Scanner {
 	return bufio.NewScanner(readCloser)
 }
 
-func Nyan(scanner *bufio.Scanner) <- chan *Entry {
+func Nyan(scanner *bufio.Scanner) <-chan *Entry {
 	out := make(chan *Entry)
 	go func() {
 		defer close(out)
@@ -45,7 +45,7 @@ func Nyan(scanner *bufio.Scanner) <- chan *Entry {
 	return out
 }
 
-func NyanForever() <- chan *Entry {
+func NyanForever() <-chan *Entry {
 	out := make(chan *Entry)
 	go func() {
 		for {
