@@ -4,10 +4,37 @@ A simple profile-based logcat filterer/highlighter.
 
 ## Usage
 
-Build: `cd streamcat && go build`
-Run: `./streamcat`
-Configuration profiles can be saved to the file: `~/.nyandroidlogcat.json` \
-Run with a non-default profile: `./nyandroidlogcat profileName`
+There are two different _breeds_ of logcat for you:
+
+  - **Stream-based** \
+    Outputs the logs based on your configured profiles to standard out. \
+    There is no interaction with the stream, scrolling is from your terminal. \
+    This version is fairly robust in terms of output.
+
+    ```shell
+    cd streamcat && go build # Build
+    ./streamcat # Run
+    ```
+
+    Configuration profiles can be saved to the file: `~/.nyandroidlogcat.json` \
+    Run with a non-default profile: `./nyandroidlogcat profileName`
+
+  - **Curses-based** \
+    Uses TermUI to create interactive UI in your terminal. \
+    Allows for interactive filtering _as the logs are coming in_. \
+    When the log is slow (or filtered to be slow) this version's interactive
+    filtering is quite nice and convenient. However, when the log is flying by,
+    this version may experience glitches and scrolling is impossible.
+
+    ```shell
+    cd cursedcat && go build # Build
+    ./cursedcat # Run
+    ```
+
+    - Type to filter the log message
+    - Use left/right to set the lower bound filter for the log level
+    - Use up/down, home/end, ctrl+j/k to move around
+    - Press escape or ctrl+c to quit
 
 ### Profile Format
 

@@ -1,6 +1,7 @@
 package nyandroidlogcat
 
 import (
+	"fmt"
 	"math"
 	"regexp"
 	"strconv"
@@ -46,6 +47,12 @@ func NewEntryFromHeader(text string) *Entry {
 		hour, minute, second, nsec*int(math.Pow10(6)),
 		now.Location())
 	return NewEntry(t, strToLevel([]rune(vv["lvl"])[0]), vv["tag"], "")
+}
+
+func (e *Entry) TermUiString() string {
+	return fmt.Sprintf(
+		"[%c](fg:%s) [%s](fg:blue) [%s](fg:black,mod:bold) %s",
+		e.Level.Rune(), e.Level.ColorString(), e.Time.Format("15:04:05"), e.Tag, e.Message)
 }
 
 func match(pattern *regexp.Regexp, text string) map[string]string {

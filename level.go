@@ -39,6 +39,60 @@ func (v Level) Rune() rune {
 	return []rune(v.String())[0]
 }
 
+func (v Level) Prev() Level {
+	switch v {
+	case Debug:
+		return Debug
+	case Verbose:
+		return Debug
+	case Info:
+		return Verbose
+	case Warning:
+		return Info
+	case Error:
+		return Warning
+	case Fatal:
+		return Error
+	}
+	panic("Unknown level")
+}
+
+func (v Level) Next() Level {
+	switch v {
+	case Debug:
+		return Verbose
+	case Verbose:
+		return Info
+	case Info:
+		return Warning
+	case Warning:
+		return Error
+	case Error:
+		return Fatal
+	case Fatal:
+		return Fatal
+	}
+	panic("Unknown level")
+}
+
+func (v Level) ColorString() string {
+	switch v {
+	case Debug:
+		return "green"
+	case Verbose:
+		return "blue"
+	case Info:
+		return "white"
+	case Warning:
+		return "yellow"
+	case Error:
+		return "red"
+	case Fatal:
+		return "magenta"
+	}
+	panic("Unknown level")
+}
+
 func (v Level) Color() *color.Color {
 	switch v {
 	case Debug:
