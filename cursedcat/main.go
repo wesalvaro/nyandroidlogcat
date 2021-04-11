@@ -15,7 +15,6 @@ const initialFilterLevel = lc.Warning
 type cursedNyandraid struct {
 	followBottom bool
 	list         *widgets.List
-	grid         *ui.Grid
 	ring         *Entring
 	entries      <-chan *lc.Entry
 }
@@ -24,26 +23,19 @@ func NewCursedNyandraid() *cursedNyandraid {
 	if err := ui.Init(); err != nil {
 		log.Fatalf("failed to initialize termui: %v", err)
 	}
+	w, h := ui.TerminalDimensions()
+
 	list := widgets.NewList()
 	list.Title = getTitleString(initialFilterLevel, "")
 	list.WrapText = true
+	list.SetRect(0, 0, w, h)
 	list.SelectedRowStyle = ui.NewStyle(ui.ColorWhite, ui.ColorBlue)
 
-	grid := ui.NewGrid()
-	termWidth, termHeight := ui.TerminalDimensions()
-	grid.SetRect(0, 0, termWidth, termHeight)
-
-	grid.Set(
-		ui.NewRow(1.0,
-			ui.NewCol(1.0, list),
-		),
-	)
-	entring := newEntring(1_000)
+	ui.Render(list)
 	return &cursedNyandraid{
 		followBottom: true,
 		list:         list,
-		grid:         grid,
-		ring:         entring,
+		ring:         newEntring(1_000),
 		entries:      lc.NyanForever(),
 	}
 }
@@ -76,7 +68,7 @@ func (n *cursedNyandraid) start() {
 		case "<Resize>":
 			payload := e.Payload.(ui.Resize)
 			width, height := payload.Width, payload.Height
-			n.grid.SetRect(0, 0, width, height)
+			n.list.SetRect(0, 0, width, height)
 		case "<Backspace>":
 			if len(filter) == 0 {
 				continue
@@ -126,7 +118,7 @@ func (n *cursedNyandraid) isAtBottom() bool {
 }
 
 func (n *cursedNyandraid) render() {
-	ui.Render(n.grid)
+	ui.Render(n.list)
 }
 
 func getTitleString(level lc.Level, filter string) string {
