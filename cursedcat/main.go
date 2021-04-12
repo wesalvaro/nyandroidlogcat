@@ -124,7 +124,7 @@ func (n *cursedNyandroid) render() {
 func getTitleString(level lc.Level, filter string) string {
 	if len(filter) == 0 {
 		return fmt.Sprintf(
-			" Level: %s (type to filter messages, 0-5 to filter levels, esc to exit) ",
+			" Level: %s (type to filter messages, left/right to filter levels, esc to exit) ",
 			level.String())
 	} else {
 		return fmt.Sprintf(" Level: %s | *%s* ", level.String(), filter)
