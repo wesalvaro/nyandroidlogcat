@@ -12,14 +12,14 @@ import (
 
 const initialFilterLevel = lc.Warning
 
-type cursedNyandraid struct {
+type cursedNyandroid struct {
 	followBottom bool
 	list         *widgets.List
 	ring         *Entring
 	entries      <-chan *lc.Entry
 }
 
-func NewCursedNyandraid() *cursedNyandraid {
+func NewCursedNyandroid() *cursedNyandroid {
 	if err := ui.Init(); err != nil {
 		log.Fatalf("failed to initialize termui: %v", err)
 	}
@@ -32,7 +32,7 @@ func NewCursedNyandraid() *cursedNyandraid {
 	list.SelectedRowStyle = ui.NewStyle(ui.ColorWhite, ui.ColorBlue)
 
 	ui.Render(list)
-	return &cursedNyandraid{
+	return &cursedNyandroid{
 		followBottom: true,
 		list:         list,
 		ring:         newEntring(1_000),
@@ -40,11 +40,11 @@ func NewCursedNyandraid() *cursedNyandraid {
 	}
 }
 
-func (n *cursedNyandraid) End() {
+func (n *cursedNyandroid) End() {
 	ui.Close()
 }
 
-func (n *cursedNyandraid) start() {
+func (n *cursedNyandroid) start() {
 	level := initialFilterLevel
 	filter := ""
 	go func() {
@@ -113,11 +113,11 @@ func (n *cursedNyandraid) start() {
 	}
 }
 
-func (n *cursedNyandraid) isAtBottom() bool {
+func (n *cursedNyandroid) isAtBottom() bool {
 	return n.list.SelectedRow == (len(n.list.Rows) - 1)
 }
 
-func (n *cursedNyandraid) render() {
+func (n *cursedNyandroid) render() {
 	ui.Render(n.list)
 }
 
@@ -132,7 +132,7 @@ func getTitleString(level lc.Level, filter string) string {
 }
 
 func main() {
-	curse := NewCursedNyandraid()
+	curse := NewCursedNyandroid()
 	defer curse.End()
 	curse.start()
 }
